@@ -2,6 +2,8 @@ import UIKit
 
 protocol MainViewProtocol: AnyObject {
     func configureAppearence()
+    func startSpinner()
+    func stopSpinner()
 }
 
 final class MainViewController: UIViewController {
@@ -24,6 +26,13 @@ final class MainViewController: UIViewController {
         return button
     }()
 
+    private lazy var spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.hidesWhenStopped = true
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter?.viewDidLoad()
@@ -38,6 +47,16 @@ extension MainViewController: MainViewProtocol {
         addSubviews()
         makeConstraints()
     }
+
+    func startSpinner() {
+        spinner.startAnimating()
+    }
+
+    func stopSpinner() {
+        DispatchQueue.main.async {
+            self.spinner.stopAnimating()
+        }
+    }
 }
 
 private extension MainViewController {
@@ -45,6 +64,7 @@ private extension MainViewController {
     func addSubviews() {
         view.addSubview(textField)
         view.addSubview(goButton)
+        view.addSubview(spinner)
     }
 
     func makeConstraints() {
@@ -58,7 +78,12 @@ private extension MainViewController {
             goButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             goButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50.0),
             goButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50.0),
-            goButton.heightAnchor.constraint(equalToConstant: 44.0)
+            goButton.heightAnchor.constraint(equalToConstant: 44.0),
+
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            spinner.heightAnchor.constraint(equalToConstant: 50.0),
+            spinner.widthAnchor.constraint(equalToConstant: 50.0)
         ])
     }
 

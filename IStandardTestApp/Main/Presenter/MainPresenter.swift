@@ -20,7 +20,9 @@ final class MainPresenter {
     }
 
     func fetchPoints(count: Int) {
-        Task(priority: .background) {
+        view?.startSpinner()
+        Task(priority: .background) { [weak self] in
+            guard let self = self else { return }
             let result = await networkService.getPoints(count: count)
             switch result {
             case .success(let success):
@@ -28,6 +30,7 @@ final class MainPresenter {
             case .failure(let failure):
                 print(failure.customMessage)
             }
+            self.view?.stopSpinner()
         }
     }
 }
