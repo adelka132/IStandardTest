@@ -17,7 +17,8 @@ final class AppCoordinator: Coordinator {
 
     private func makeRootViewController() -> UINavigationController {
         let viewController = MainViewController()
-        let presenter = MainPresenter(view: viewController)
+        let service = PointService()
+        let presenter = MainPresenter(view: viewController, networkService: service)
         viewController.presenter = presenter
         return UINavigationController(rootViewController: viewController)
     }

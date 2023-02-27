@@ -10,7 +10,8 @@ final class MainViewCoordinator: Coordinator {
 
     func start() {
         let viewController = MainViewController()
-        let presenter = MainPresenter(view: viewController)
+        let service = PointService()
+        let presenter = MainPresenter(view: viewController, networkService: service)
         viewController.presenter = presenter
         navigationController.pushViewController(viewController, animated: true)
     }

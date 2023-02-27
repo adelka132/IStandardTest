@@ -12,7 +12,7 @@ final class MainViewController: UIViewController {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Сколько точек?"
-        textField.backgroundColor = .magenta
+        textField.backgroundColor = .gray
         return textField
     }()
 
@@ -33,7 +33,7 @@ final class MainViewController: UIViewController {
 extension MainViewController: MainViewProtocol {
 
     func configureAppearence() {
-        view.backgroundColor = .orange
+        view.backgroundColor = .white
         goButton.addTarget(self, action: #selector(getText), for: .touchUpInside)
         addSubviews()
         makeConstraints()
@@ -63,7 +63,17 @@ private extension MainViewController {
     }
 
     @objc func getText() {
-        let dots = String(optionallyDescribing: textField.text)
-        print(dots)
+        presenter?.tapButton()
+    }
+}
+
+extension Data {
+    var prettyJson: NSString? {
+        guard let object = try? JSONSerialization.jsonObject(with: self, options: []),
+              let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
+              let prettyPrintedString = NSString(data: data,
+                                                 encoding: String.Encoding.utf8.rawValue) else { return nil }
+
+        return prettyPrintedString
     }
 }
