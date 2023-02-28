@@ -10,16 +10,13 @@ final class AppCoordinator: Coordinator {
     }
 
     func start() {
-        rootViewController = makeRootViewController()
+        rootViewController = UINavigationController()
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
     }
 
-    private func makeRootViewController() -> UINavigationController {
-        let viewController = MainViewController()
-        let service = PointService()
-        let presenter = MainPresenter(view: viewController, networkService: service)
-        viewController.presenter = presenter
-        return UINavigationController(rootViewController: viewController)
+    func showMainViewController() {
+        let mainVC = MainViewCoordinator(navigationController: rootViewController!)
+        coordinate(to: mainVC)
     }
 }
