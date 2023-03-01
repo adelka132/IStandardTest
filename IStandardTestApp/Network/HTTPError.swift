@@ -30,9 +30,3 @@ enum HTTPError: Error {
  1) Заменить кастом на дефолт Error
  2) В нужном мне сервисе обрабатываю эту ошбику как мне надо
  */
-
-enum PointServiceError {
-    dskfjhdsjfkhsdfsd
-    sbadasds
-    jklfsdjfklsdf
-}
