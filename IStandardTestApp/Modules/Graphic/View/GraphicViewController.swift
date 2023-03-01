@@ -50,6 +50,7 @@ extension GraphicViewController: UITableViewDataSource {
         
         var cellConfig = cell.defaultContentConfiguration()
         cellConfig.text = "x: \(data.x) y: \(data.y)"
+        cell.contentConfiguration = cellConfig
         return cell
     }
 }
@@ -59,9 +60,12 @@ extension GraphicViewController: UITableViewDataSource {
 extension GraphicViewController: GraphicViewProtocol {
 
     func configureAppearence() {
+        view.addSubview(tableView)
+        view.backgroundColor = .white
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        makeConstraints()
     }
 
     func updateTableView() {
