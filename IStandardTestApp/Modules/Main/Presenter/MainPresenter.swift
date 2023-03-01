@@ -5,20 +5,25 @@ protocol MainPresenterProtocol {
     func tapButton()
 }
 
+enum MainRout {
+    case showGraphic(GraphicData)
+}
+
 // MARK: - MainPresenter
 
 final class MainPresenter {
 
     weak var view: MainViewProtocol?
-    var coordinator: MainViewCoordinatorProtocol?
     private let networkService: PointService
+    private let completionHandler: (MainRout) -> Void
 
     // MARK: - Initialization
 
-    init(view: MainViewProtocol, networkService: PointService, coordinator: MainViewCoordinatorProtocol) {
+    init(view: MainViewProtocol,
+         networkService: PointService, completion: @escaping (MainRout) -> Void) {
         self.view = view
         self.networkService = networkService
-        self.coordinator = coordinator
+        self.completionHandler = completion
     }
 
     func fetchPoints(count: Int) {
@@ -30,8 +35,9 @@ final class MainPresenter {
             self.view?.stopSpinner()
             switch result {
             case .success(let success):
+                print(success.points)
                 DispatchQueue.main.async {
-                    self.coordinator?.showGraphic(with: success)
+                    self.completionHandler(.showGraphic(success))
                 }
             case .failure(let failure):
                 print(failure.customMessage)

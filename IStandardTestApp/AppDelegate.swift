@@ -12,7 +12,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         appCoordinator = AppCoordinator(window: window)
         appCoordinator?.start()
-        appCoordinator?.showMainViewController()
         return true
     }
 }

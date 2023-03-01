@@ -6,7 +6,9 @@ protocol MainViewCoordinatorProtocol: AnyObject {
 
 final class MainViewCoordinator: Coordinator {
 
-    private let navigationController: UINavigationController
+    var coordinators: [Coordinator] = []
+
+    var navigationController: UINavigationController
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -15,7 +17,13 @@ final class MainViewCoordinator: Coordinator {
     func start() {
         let viewController = MainViewController()
         let service = PointService()
-        let presenter = MainPresenter(view: viewController, networkService: service, coordinator: self)
+        let presenter = MainPresenter(view: viewController,
+                                      networkService: service) { [weak self] rout in
+            switch rout {
+            case .showGraphic(let data):
+                self?.showGraphic(with: data)
+            }
+        }
         viewController.presenter = presenter
         navigationController.pushViewController(viewController, animated: true)
     }
@@ -23,8 +31,9 @@ final class MainViewCoordinator: Coordinator {
 
 extension MainViewCoordinator: MainViewCoordinatorProtocol {
     func showGraphic(with data: GraphicData) {
-        let coordinator = GraphicViewCoordinator(navigationController: navigationController, graphicData: data)
-//        coordinator.start()
-        coordinate(to: coordinator)
+        let viewController = GraphicViewController()
+        let presenter = GraphicPresenter(view: viewController, graphicData: data)
+        viewController.presenter = presenter
+        navigationController.pushViewController(viewController, animated: true)
     }
 }

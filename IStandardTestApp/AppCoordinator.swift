@@ -2,21 +2,24 @@ import UIKit
 
 final class AppCoordinator: Coordinator {
 
+    var coordinators: [Coordinator] = []
+
     private weak var window: UIWindow?
-    private var rootViewController: UINavigationController?
+    var navigationController: UINavigationController = UINavigationController()
 
     init(window: UIWindow?) {
         self.window = window
     }
 
     func start() {
-        rootViewController = UINavigationController()
-        window?.rootViewController = rootViewController
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+        showMainViewController()
     }
 
     func showMainViewController() {
-        let mainVC = MainViewCoordinator(navigationController: rootViewController!)
-        coordinate(to: mainVC)
+        let mainCoordinator = MainViewCoordinator(navigationController: navigationController)
+        coordinators.append(mainCoordinator)
+        mainCoordinator.start()
     }
 }
