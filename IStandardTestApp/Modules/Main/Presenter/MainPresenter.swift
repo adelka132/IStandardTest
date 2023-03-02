@@ -2,7 +2,7 @@ import Foundation
 
 protocol MainPresenterProtocol {
     func viewDidLoad()
-    func tapButton()
+    func tapButton(count points: Int)
 }
 
 enum MainRout {
@@ -28,7 +28,7 @@ final class MainPresenter {
 
     func fetchPoints(count: Int) {
         view?.startSpinner()
-        Task(priority: .background) { [weak self] in
+        Task { [weak self] in
             guard let self = self else { return }
             let result = await networkService.getPoints(count: count)
 
@@ -48,11 +48,11 @@ final class MainPresenter {
 // MARK: - MainPresenterProtocol
 
 extension MainPresenter: MainPresenterProtocol {
+    func tapButton(count points: Int) {
+        fetchPoints(count: points)
+    }
+    
     func viewDidLoad() {
         view?.configureAppearence()
-    }
-
-    func tapButton() {
-        fetchPoints(count: 10)
     }
 }

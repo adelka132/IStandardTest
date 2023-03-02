@@ -14,6 +14,7 @@ final class MainViewController: UIViewController {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Сколько точек?"
+        textField.keyboardType = .numberPad
         textField.backgroundColor = .gray
         return textField
     }()
@@ -40,12 +41,16 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         presenter?.viewDidLoad()
     }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 
 extension MainViewController: MainViewProtocol {
 
     func configureAppearence() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         goButton.addTarget(self, action: #selector(getText), for: .touchUpInside)
         addSubviews()
         makeConstraints()
@@ -75,9 +80,7 @@ extension MainViewController: MainViewProtocol {
 private extension MainViewController {
 
     func addSubviews() {
-        view.addSubview(textField)
-        view.addSubview(goButton)
-        view.addSubview(spinner)
+        view.addSubview(textField, goButton, spinner)
     }
 
     func makeConstraints() {
@@ -101,7 +104,12 @@ private extension MainViewController {
     }
 
     @objc func getText() {
-        presenter?.tapButton()
+        defer { textField.resignFirstResponder() }
+        guard
+            let text = textField.text,
+            let count = Int(text)
+        else { return }
+        presenter?.tapButton(count: count)
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
@@ -131,16 +139,5 @@ private extension MainViewController {
                 view.layoutIfNeeded()
             }
         }
-    }
-}
-
-extension Data {
-    var prettyJson: NSString? {
-        guard let object = try? JSONSerialization.jsonObject(with: self, options: []),
-              let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
-              let prettyPrintedString = NSString(data: data,
-                                                 encoding: String.Encoding.utf8.rawValue) else { return nil }
-
-        return prettyPrintedString
     }
 }

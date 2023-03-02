@@ -1,8 +1,8 @@
 import Foundation
 
-public protocol _OptionalProtocol<Wrapped> {
+protocol _OptionalProtocol<Wrapped> {
     associatedtype Wrapped
-    
+
     var description: String { get }
 }
 
@@ -18,7 +18,7 @@ extension Optional: _OptionalProtocol {
     }
 }
 
-internal extension String {
+extension String {
     @usableFromInline
     init(optionallyDescribing value: some Any) {
         self = (value as? any _OptionalProtocol)?.description ?? String(describing: value)
