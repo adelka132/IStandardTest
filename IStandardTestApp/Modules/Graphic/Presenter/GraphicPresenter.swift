@@ -44,13 +44,7 @@ extension GraphicPresenter: GraphicPresenterProtocol {
     }
 }
 
-extension Collection {
-    subscript (safe index: Index) -> Element? {
-        return indices.contains(index) ? self[index] : nil
-    }
-}
-
-extension ChartDataEntry {
+private extension ChartDataEntry {
     convenience init(_ points: Point) {
         self.init(x: points.x, y: points.y)
     }
