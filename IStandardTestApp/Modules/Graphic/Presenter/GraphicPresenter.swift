@@ -37,7 +37,7 @@ extension GraphicPresenter: GraphicPresenterProtocol {
     func dataFor(row: Int) -> Point? { points[safe: row] }
 
     func getDataForGraphic() -> LineChartData {
-        let points = points.compactMap { ChartDataEntry(x: $0.x, y: $0.y) }
+        let points = points.compactMap(ChartDataEntry.init)
         let dataSet = LineChartDataSet(entries: points)
         dataSet.mode = .cubicBezier
         return LineChartData(dataSet: dataSet)
@@ -47,5 +47,11 @@ extension GraphicPresenter: GraphicPresenterProtocol {
 extension Collection {
     subscript (safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
+    }
+}
+
+extension ChartDataEntry {
+    convenience init(_ points: Point) {
+        self.init(x: points.x, y: points.y)
     }
 }

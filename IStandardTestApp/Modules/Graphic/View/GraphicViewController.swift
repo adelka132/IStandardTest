@@ -24,13 +24,17 @@ final class GraphicViewController: UIViewController {
         return gView
     }()
 
+    // MARK: - Contstraints
+
     private lazy var equalHeight = NSLayoutConstraint(item: graphicView,
-                                              attribute: .height,
-                                              relatedBy: .equal,
-                                              toItem: tableView,
-                                              attribute: .height,
-                                              multiplier: 1.0,
-                                              constant: 0.0)
+                                                      attribute: .height,
+                                                      relatedBy: .equal,
+                                                      toItem: tableView,
+                                                      attribute: .height,
+                                                      multiplier: 1.0,
+                                                      constant: 0.0)
+    private lazy var landscapeGraphcLeading = graphicView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+    private lazy var graphicLeading = graphicView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
 
     // MARK: - UIViewController
 
@@ -48,8 +52,12 @@ final class GraphicViewController: UIViewController {
         super.viewDidLayoutSubviews()
         if view.window?.windowScene?.interfaceOrientation == .landscapeRight {
             equalHeight.isActive = false
+            graphicLeading.isActive = false
+            landscapeGraphcLeading.isActive = true
         } else {
             equalHeight.isActive = true
+            graphicLeading.isActive = true
+            landscapeGraphcLeading.isActive = false
         }
     }
 }
@@ -63,7 +71,6 @@ extension GraphicViewController: GraphicViewProtocol {
         view.addSubview(graphicView)
         view.backgroundColor = .white
 
-        graphicView.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
@@ -99,14 +106,6 @@ extension GraphicViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-// MARK: -
-
-extension GraphicViewController: ChartViewDelegate {
-    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
-        print(entry)
-    }
-}
-
 // MARK: - Private Methods
 
 private extension GraphicViewController {
@@ -117,7 +116,6 @@ private extension GraphicViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             graphicView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            graphicView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             graphicView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             graphicView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
             equalHeight
