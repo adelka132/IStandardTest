@@ -1,7 +1,6 @@
 import Foundation
 
 protocol MainPresenterProtocol {
-    func viewDidLoad()
     func tapButton(count points: Int)
 }
 
@@ -49,9 +48,5 @@ extension MainPresenter: MainPresenterProtocol {
         Task { [weak self] in
             await self?.fetchPoints(count: points)
         }
-    }
-
-    func viewDidLoad() {
-        view?.configureAppearence()
     }
 }

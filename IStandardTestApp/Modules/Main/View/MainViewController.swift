@@ -1,7 +1,6 @@
 import UIKit
 
 protocol MainViewProtocol: AnyObject {
-    func configureAppearence()
     func startSpinner()
     func stopSpinner()
 }
@@ -39,7 +38,6 @@ final class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter?.viewDidLoad()
     }
 
     deinit {
@@ -47,11 +45,26 @@ final class MainViewController: UIViewController {
     }
 }
 
+// MARK: - MainViewProtocol
+
 extension MainViewController: MainViewProtocol {
+
+    func startSpinner() {
+        spinner.startAnimating()
+    }
+
+    func stopSpinner() {
+        spinner.stopAnimating()
+    }
+}
+
+// MARK: - Private Methods
+
+private extension MainViewController {
 
     func configureAppearence() {
         view.backgroundColor = .systemBackground
-        goButton.addTarget(self, action: #selector(getText), for: .touchUpInside)
+        goButton.addTarget(self, action: #selector(goButtonPressed), for: .touchUpInside)
         addSubviews()
         makeConstraints()
 
@@ -65,17 +78,6 @@ extension MainViewController: MainViewProtocol {
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
-
-    func startSpinner() {
-        spinner.startAnimating()
-    }
-
-    func stopSpinner() {
-        spinner.stopAnimating()
-    }
-}
-
-private extension MainViewController {
 
     func addSubviews() {
         view.addSubview(textField, goButton, spinner)
@@ -97,11 +99,11 @@ private extension MainViewController {
             spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             spinner.heightAnchor.constraint(equalToConstant: 50.0),
-            spinner.widthAnchor.constraint(equalToConstant: 50.0)
+            spinner.widthAnchor.constraint(equalTo: spinner.heightAnchor)
         ])
     }
 
-    @objc func getText() {
+    @objc func goButtonPressed() {
         defer { textField.resignFirstResponder() }
         guard
             let text = textField.text,
@@ -117,7 +119,7 @@ private extension MainViewController {
 
     @objc func keyboardWillShow(notification : Notification?) -> Void {
         
-        var _kbSize: CGSize!
+        var _kbSize: CGSize
         
         if let info = notification?.userInfo {
             
