@@ -3,7 +3,7 @@ import Charts
 
 protocol GraphicViewProtocol: AnyObject {
     func updateTableView()
-    func updateGraphic()
+    func updateGraphic(with data: LineChartData)
 }
 
 final class GraphicViewController: UIViewController {
@@ -76,8 +76,8 @@ extension GraphicViewController: GraphicViewProtocol {
         configure(by: presenter?.points ?? [])
     }
 
-    func updateGraphic() {
-        graphicView.data = presenter?.getDataForGraphic()
+    func updateGraphic(with data: LineChartData) {
+        graphicView.data = data
     }
 }
 
@@ -88,10 +88,13 @@ private extension GraphicViewController {
     func configureAppearence() {
         view.addSubview(tableView, graphicView)
         view.backgroundColor = .systemBackground
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Screenshot",
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(screenshotTapped))
 
         tableView.dataSource = setPointsTableViewDataSource
         tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
-
         makeConstraints()
     }
 
@@ -114,5 +117,29 @@ private extension GraphicViewController {
         snapshot.appendSections([0])
         snapshot.appendItems(model, toSection: 0)
         setPointsTableViewDataSource.apply(snapshot)
+    }
+
+    @objc func screenshotTapped() {
+        if let image = graphicView.getChartImage(transparent: true) {
+            UIImageWriteToSavedPhotosAlbum(image,
+                                           self,
+                                           #selector(image(_:didFinishSavingWithError:contextInfo:)),
+                                           nil)
+        }
+    }
+
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            showAlert(title: "Ошибка", message: error.localizedDescription)
+        } else {
+            showAlert(title: "Успешно", message: "Скриншот сохранён")
+        }
+    }
+
+    func showAlert(title: String, message: String) {
+        let alertView = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Ок", style: .default)
+        alertView.addAction(alertAction)
+        present(alertView, animated: true)
     }
 }

@@ -2,10 +2,8 @@ import Foundation
 import Charts
 
 protocol GraphicPresenterProtocol {
-    var numberOfRows: Int { get }
     var points: [Point] { get }
     func viewDidLoad()
-    func getDataForGraphic() -> LineChartData
 }
 
 final class GraphicPresenter {
@@ -17,22 +15,22 @@ final class GraphicPresenter {
         self.view = view
         self.points = points.sorted(by: { $0.x < $1.x })
     }
-}
 
-extension GraphicPresenter: GraphicPresenterProtocol {
-
-    var numberOfRows: Int { points.count }
-    
-    func viewDidLoad() {
-        view?.updateTableView()
-        view?.updateGraphic()
-    }
-
-    func getDataForGraphic() -> LineChartData {
+    private func getDataForGraphic() -> LineChartData {
         let points = points.compactMap(ChartDataEntry.init)
         let dataSet = LineChartDataSet(entries: points)
         dataSet.mode = .cubicBezier
         return LineChartData(dataSet: dataSet)
+    }
+}
+
+extension GraphicPresenter: GraphicPresenterProtocol {
+
+    func viewDidLoad() {
+        view?.updateTableView()
+
+        let data = getDataForGraphic()
+        view?.updateGraphic(with: data)
     }
 }
 
