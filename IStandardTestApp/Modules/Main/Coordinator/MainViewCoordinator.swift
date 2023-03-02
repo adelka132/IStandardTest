@@ -16,10 +16,11 @@ final class MainViewCoordinator: Coordinator {
 
     func start() {
         let viewController = MainViewController()
-        let service = PointService()
+        let httpClient = HTTPClient()
+        let service = PointService(httpClient: httpClient)
         let presenter = MainPresenter(view: viewController,
-                                      networkService: service) { [weak self] rout in
-            switch rout {
+                                      networkService: service) { [weak self] route in
+            switch route {
             case .showGraphic(let points):
                 self?.showGraphic(with: points)
             }

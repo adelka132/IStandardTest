@@ -5,7 +5,7 @@ protocol MainPresenterProtocol {
     func tapButton(count points: Int)
 }
 
-enum MainRout {
+enum MainRoute {
     case showGraphic([Point])
 }
 
@@ -15,32 +15,29 @@ final class MainPresenter {
 
     weak var view: MainViewProtocol?
     private let networkService: PointService
-    private let completionHandler: (MainRout) -> Void
+    private let completionHandler: (MainRoute) -> Void
 
     // MARK: - Initialization
 
     init(view: MainViewProtocol,
-         networkService: PointService, completion: @escaping (MainRout) -> Void) {
+         networkService: PointService, completion: @escaping (MainRoute) -> Void) {
         self.view = view
         self.networkService = networkService
         self.completionHandler = completion
     }
 
-    func fetchPoints(count: Int) {
+    @MainActor
+    func fetchPoints(count: Int) async {
         view?.startSpinner()
-        Task { [weak self] in
-            guard let self = self else { return }
-            let result = await networkService.getPoints(count: count)
 
-            self.view?.stopSpinner()
-            switch result {
-            case .success(let success):
-                DispatchQueue.main.async {
-                    self.completionHandler(.showGraphic(success.points))
-                }
-            case .failure(let failure):
-                print(failure.customMessage)
-            }
+        let result = await networkService.getPoints(count: count)
+
+        view?.stopSpinner()
+        switch result {
+        case .success(let success):
+            self.completionHandler(.showGraphic(success.points))
+        case .failure(let failure):
+            print(failure.localizedDescription)
         }
     }
 }
@@ -49,9 +46,11 @@ final class MainPresenter {
 
 extension MainPresenter: MainPresenterProtocol {
     func tapButton(count points: Int) {
-        fetchPoints(count: points)
+        Task { [weak self] in
+            await self?.fetchPoints(count: points)
+        }
     }
-    
+
     func viewDidLoad() {
         view?.configureAppearence()
     }

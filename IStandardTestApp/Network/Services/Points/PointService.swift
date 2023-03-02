@@ -2,28 +2,29 @@ import Foundation
 
 protocol PointServiceable {
     //заменили кастом еррор на дефолт
-    func getPoints(count: Int) async -> Result<GraphicData, HTTPError>
+    func getPoints(count: Int) async -> Result<GraphicData, PointsError>
 }
 
-struct PointService: HTTPClient, PointServiceable {
-    func getPoints(count: Int) async -> Result<GraphicData, HTTPError> {
-        await sendRequest(endpoint: PointsEndpoint.points(count: count),
-                          responseModel: GraphicData.self)
+struct PointService: PointServiceable {
+
+    private let httpClient: HTTPClient
+
+    init(httpClient: HTTPClient) {
+        self.httpClient = httpClient
+    }
+
+    func getPoints(count: Int) async -> Result<GraphicData, PointsError> {
+        let result = await httpClient.sendRequest(endpoint: PointsEndpoint.points(count: count), responseModel: GraphicData.self)
+        let newResult = result.mapError { error in
+            switch error {
+            case .badRequest:
+                return PointsError.badRequest
+            case .internalServerError:
+                return PointsError.internalServerError
+            default:
+                return PointsError.unknown(error.localizedDescription)
+            }
+        }
+        return newResult
     }
 }
-/*
- Cannot convert return expression of type 'Result<GraphicData, String>' to return type 'Result<GraphicData, any Error>'
- 
- пробуем ебануть кастомную ошибку на разные сервисы
- 
- let maptResult = result.mapError { error in
-     switch error {
-     case .badRequest:
-         return "не верное кол-во точек"
-     case .internalServerError:
-         return "Очень внезапная (и страшная) ошибка"
-     default:
-         return "QUAVO?"
-     }
- }
- */

@@ -26,15 +26,9 @@ final class GraphicViewController: UIViewController {
 
     // MARK: - Contstraints
 
-    private lazy var equalHeight = NSLayoutConstraint(item: graphicView,
-                                                      attribute: .height,
-                                                      relatedBy: .equal,
-                                                      toItem: tableView,
-                                                      attribute: .height,
-                                                      multiplier: 1.0,
-                                                      constant: 0.0)
-    private lazy var landscapeGraphcLeading = graphicView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+    private lazy var equalHeight = graphicView.heightAnchor.constraint(equalTo: tableView.heightAnchor)
     private lazy var graphicLeading = graphicView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+    private lazy var landscapeGraphcLeading = graphicView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
 
     // MARK: - UIViewController
 
@@ -78,9 +72,7 @@ extension GraphicViewController: GraphicViewProtocol {
     }
 
     func updateTableView() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        tableView.reloadData()
     }
 
     func updateGraphic() {
@@ -118,6 +110,7 @@ private extension GraphicViewController {
 
             graphicView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             graphicView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            graphicLeading,
             graphicView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
             equalHeight
         ])

@@ -34,8 +34,8 @@ final class MainViewController: UIViewController {
         return spinner
     }()
 
-    private lazy var bottomButtonConstraint: NSLayoutConstraint = goButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                                                                                                   constant: -16.0)
+    private lazy var bottomButtonConstraint: NSLayoutConstraint = goButton.bottomAnchor.constraint(
+        equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16.0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,9 +71,7 @@ extension MainViewController: MainViewProtocol {
     }
 
     func stopSpinner() {
-        DispatchQueue.main.async {
-            self.spinner.stopAnimating()
-        }
+        spinner.stopAnimating()
     }
 }
 
