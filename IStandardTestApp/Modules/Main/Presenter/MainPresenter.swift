@@ -19,7 +19,9 @@ final class MainPresenter {
     // MARK: - Initialization
 
     init(view: MainViewProtocol,
-         networkService: PointService, completion: @escaping (MainRoute) -> Void) {
+         networkService: PointService,
+         completion: @escaping (MainRoute) -> Void)
+    {
         self.view = view
         self.networkService = networkService
         self.completionHandler = completion
@@ -28,14 +30,15 @@ final class MainPresenter {
     @MainActor
     func fetchPoints(count: Int) async {
         view?.startSpinner()
+        defer { view?.stopSpinner() }
 
         let result = await networkService.getPoints(count: count)
 
-        view?.stopSpinner()
         switch result {
         case .success(let success):
             self.completionHandler(.showGraphic(success.points))
         case .failure(let failure):
+            // FIXME: - Показывать это как алерт
             print(failure.localizedDescription)
         }
     }

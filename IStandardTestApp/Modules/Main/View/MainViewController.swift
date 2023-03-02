@@ -38,6 +38,7 @@ final class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureAppearence()
     }
 
     deinit {
