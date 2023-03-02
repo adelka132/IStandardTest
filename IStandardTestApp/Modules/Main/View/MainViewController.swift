@@ -20,10 +20,11 @@ final class MainViewController: UIViewController {
     }()
 
     private let goButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Поехали", for: .normal)
-        button.backgroundColor = .brown
+        button.setTitleColor(.yellow, for: .normal)
+        button.backgroundColor = .gray
         return button
     }()
 
@@ -52,10 +53,12 @@ final class MainViewController: UIViewController {
 extension MainViewController: MainViewProtocol {
 
     func startSpinner() {
+        goButton.isEnabled = false
         spinner.startAnimating()
     }
 
     func stopSpinner() {
+        goButton.isEnabled = true
         spinner.stopAnimating()
     }
 
@@ -117,7 +120,10 @@ private extension MainViewController {
         guard
             let text = textField.text,
             let count = Int(text)
-        else { return }
+        else {
+            showError(with: "Введите число")
+            return
+        }
         presenter?.tapButton(count: count)
     }
 
