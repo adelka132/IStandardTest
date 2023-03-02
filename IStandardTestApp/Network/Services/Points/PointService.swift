@@ -1,7 +1,6 @@
 import Foundation
 
 protocol PointServiceable {
-    //заменили кастом еррор на дефолт
     func getPoints(count: Int) async -> Result<GraphicData, PointsError>
 }
 
