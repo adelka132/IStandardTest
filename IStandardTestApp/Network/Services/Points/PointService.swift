@@ -27,4 +27,3 @@ struct PointService: HTTPClient, PointServiceable {
      }
  }
  */
-extension String: Error { }

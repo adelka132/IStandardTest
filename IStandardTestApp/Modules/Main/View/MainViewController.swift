@@ -14,6 +14,7 @@ final class MainViewController: UIViewController {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Сколько точек?"
+        textField.keyboardType = .numberPad
         textField.backgroundColor = .gray
         return textField
     }()
@@ -45,7 +46,7 @@ final class MainViewController: UIViewController {
 extension MainViewController: MainViewProtocol {
 
     func configureAppearence() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         goButton.addTarget(self, action: #selector(getText), for: .touchUpInside)
         addSubviews()
         makeConstraints()
@@ -101,7 +102,12 @@ private extension MainViewController {
     }
 
     @objc func getText() {
-        presenter?.tapButton()
+        defer { textField.resignFirstResponder() }
+        guard
+            let text = textField.text,
+            let count = Int(text)
+        else { return }
+        presenter?.tapButton(count: count)
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {

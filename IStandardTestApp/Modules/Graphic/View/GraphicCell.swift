@@ -28,7 +28,3 @@ private extension GraphicCell {
         contentConfiguration = cellConfig
     }
 }
-
-extension UITableViewCell {
-    static var identifier: String { String(describing: self) }
-}

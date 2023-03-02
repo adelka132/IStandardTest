@@ -2,7 +2,7 @@ import Foundation
 
 protocol MainPresenterProtocol {
     func viewDidLoad()
-    func tapButton()
+    func tapButton(count points: Int)
 }
 
 enum MainRout {
@@ -48,11 +48,11 @@ final class MainPresenter {
 // MARK: - MainPresenterProtocol
 
 extension MainPresenter: MainPresenterProtocol {
+    func tapButton(count points: Int) {
+        fetchPoints(count: points)
+    }
+    
     func viewDidLoad() {
         view?.configureAppearence()
-    }
-
-    func tapButton() {
-        fetchPoints(count: 10)
     }
 }

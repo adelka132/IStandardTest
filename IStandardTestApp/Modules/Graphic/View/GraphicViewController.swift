@@ -69,7 +69,7 @@ extension GraphicViewController: GraphicViewProtocol {
     func configureAppearence() {
         view.addSubview(tableView)
         view.addSubview(graphicView)
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
 
         tableView.delegate = self
         tableView.dataSource = self
