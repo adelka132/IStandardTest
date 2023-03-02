@@ -24,6 +24,14 @@ final class GraphicViewController: UIViewController {
         return gView
     }()
 
+    private lazy var equalHeight = NSLayoutConstraint(item: graphicView,
+                                              attribute: .height,
+                                              relatedBy: .equal,
+                                              toItem: tableView,
+                                              attribute: .height,
+                                              multiplier: 1.0,
+                                              constant: 0.0)
+
     // MARK: - UIViewController
 
     override func viewDidLoad() {
@@ -34,6 +42,15 @@ final class GraphicViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         presenter?.viewDidAppear()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if view.window?.windowScene?.interfaceOrientation == .landscapeRight {
+            equalHeight.isActive = false
+        } else {
+            equalHeight.isActive = true
+        }
     }
 }
 
@@ -94,13 +111,6 @@ extension GraphicViewController: ChartViewDelegate {
 
 private extension GraphicViewController {
     func makeConstraints() {
-        let equalHeight = NSLayoutConstraint(item: tableView,
-                                             attribute: .height,
-                                             relatedBy: .equal,
-                                             toItem: graphicView,
-                                             attribute: .height,
-                                             multiplier: 1.0,
-                                             constant: 0.0)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
