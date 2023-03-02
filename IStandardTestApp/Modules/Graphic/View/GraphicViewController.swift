@@ -1,4 +1,5 @@
 import UIKit
+import Charts
 
 protocol GraphicViewProtocol: AnyObject {
     func configureAppearence()
@@ -13,6 +14,11 @@ final class GraphicViewController: UIViewController {
         var tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
+    }()
+
+    private lazy var graphicView: LineChartView = {
+        let gView = LineChartView()
+        return gView
     }()
 
     // MARK: - UIViewController
@@ -43,14 +49,12 @@ extension GraphicViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? UITableViewCell else {
-            return UITableViewCell()
-        }
-        guard let data = presenter?.dataFor(row: indexPath.row) else { return UITableViewCell() }
-        
-        var cellConfig = cell.defaultContentConfiguration()
-        cellConfig.text = "x: \(data.x) y: \(data.y)"
-        cell.contentConfiguration = cellConfig
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: GraphicCell.identifier, for: indexPath) as? GraphicCell,
+            let data = presenter?.dataFor(row: indexPath.row)
+        else { return UITableViewCell() }
+
+        cell.set(model: data)
         return cell
     }
 }
@@ -64,7 +68,7 @@ extension GraphicViewController: GraphicViewProtocol {
         view.backgroundColor = .white
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
         makeConstraints()
     }
 
@@ -77,6 +81,8 @@ extension GraphicViewController: GraphicViewProtocol {
 
 private extension GraphicViewController {
     func makeConstraints() {
+        //let heightConstraint = NSLayoutConstraint(item: view1, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
+//        view1.addConstraint(heightConstraint)
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
