@@ -3,6 +3,7 @@ import UIKit
 protocol MainViewProtocol: AnyObject {
     func startSpinner()
     func stopSpinner()
+    func showError(with message: String)
 }
 
 final class MainViewController: UIViewController {
@@ -56,6 +57,13 @@ extension MainViewController: MainViewProtocol {
 
     func stopSpinner() {
         spinner.stopAnimating()
+    }
+
+    func showError(with message: String) {
+        let alertView = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Ок", style: .default)
+        alertView.addAction(alertAction)
+        present(alertView, animated: true)
     }
 }
 

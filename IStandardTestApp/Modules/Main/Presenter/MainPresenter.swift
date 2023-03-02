@@ -38,8 +38,7 @@ final class MainPresenter {
         case .success(let success):
             self.completionHandler(.showGraphic(success.points))
         case .failure(let failure):
-            // FIXME: - Показывать это как алерт
-            print(failure.localizedDescription)
+            self.view?.showError(with: failure.localizedDescription)
         }
     }
 }
