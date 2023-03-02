@@ -2,7 +2,6 @@ import UIKit
 import Charts
 
 protocol GraphicViewProtocol: AnyObject {
-    func configureAppearence()
     func updateTableView()
     func updateGraphic()
 }
@@ -24,28 +23,35 @@ final class GraphicViewController: UIViewController {
         return gView
     }()
 
+    private lazy var setPointsTableViewDataSource: UITableViewDiffableDataSource<Int, Point> = {
+        .init(tableView: tableView) { tableView, indexPath, model in
+            guard
+                let cell = tableView.dequeueReusableCell(withIdentifier: GraphicCell.identifier,
+                                                         for: indexPath) as? GraphicCell
+            else { return UITableViewCell() }
+
+            cell.set(model: model)
+            return cell
+        }
+    }()
+
     // MARK: - Contstraints
 
-    private lazy var equalHeight = NSLayoutConstraint(item: graphicView,
-                                                      attribute: .height,
-                                                      relatedBy: .equal,
-                                                      toItem: tableView,
-                                                      attribute: .height,
-                                                      multiplier: 1.0,
-                                                      constant: 0.0)
-    private lazy var landscapeGraphcLeading = graphicView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+    private lazy var equalHeight = graphicView.heightAnchor.constraint(equalTo: tableView.heightAnchor)
     private lazy var graphicLeading = graphicView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+    private lazy var landscapeGraphcLeading = graphicView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
 
     // MARK: - UIViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureAppearence()
+
         presenter?.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        presenter?.viewDidAppear()
     }
 
     override func viewDidLayoutSubviews() {
@@ -66,21 +72,8 @@ final class GraphicViewController: UIViewController {
 
 extension GraphicViewController: GraphicViewProtocol {
 
-    func configureAppearence() {
-        view.addSubview(tableView, graphicView)
-        view.backgroundColor = .systemBackground
-
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
-
-        makeConstraints()
-    }
-
     func updateTableView() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        configure(by: presenter?.points ?? [])
     }
 
     func updateGraphic() {
@@ -88,28 +81,20 @@ extension GraphicViewController: GraphicViewProtocol {
     }
 }
 
-// MARK: - UITableViewDataSource, UITableViewDelegate
-
-extension GraphicViewController: UITableViewDataSource, UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        presenter?.numberOfRows ?? 0
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: GraphicCell.identifier, for: indexPath) as? GraphicCell,
-            let data = presenter?.dataFor(row: indexPath.row)
-        else { return UITableViewCell() }
-
-        cell.set(model: data)
-        return cell
-    }
-}
-
 // MARK: - Private Methods
 
 private extension GraphicViewController {
+
+    func configureAppearence() {
+        view.addSubview(tableView, graphicView)
+        view.backgroundColor = .systemBackground
+
+        tableView.dataSource = setPointsTableViewDataSource
+        tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
+
+        makeConstraints()
+    }
+
     func makeConstraints() {
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -118,8 +103,16 @@ private extension GraphicViewController {
 
             graphicView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             graphicView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            graphicLeading,
             graphicView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
             equalHeight
         ])
+    }
+
+    func configure(by model: [Point]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Point>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(model, toSection: 0)
+        setPointsTableViewDataSource.apply(snapshot)
     }
 }

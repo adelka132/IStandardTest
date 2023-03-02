@@ -1,6 +1,6 @@
 import Foundation
 
-enum HTTPError: Error {
+enum HTTPError: LocalizedError {
     case decode
     case invalidURL
     case noResponse
@@ -10,23 +10,18 @@ enum HTTPError: Error {
     case badRequest
     case internalServerError
 
-    var customMessage: String {
+    var errorDescription: String? {
         switch self {
         case .decode:
             return "Decode error"
         case .unauthorized:
             return "Session expired"
         case .badRequest:
-            return "не верное кол-во точек"
+            return "Bad request"
         case .internalServerError:
-            return "Очень внезапная (и страшная) ошибка"
+            return "Internal Server Error"
         default:
             return "Unknown error"
         }
     }
 }
-
-/*
- 1) Заменить кастом на дефолт Error
- 2) В нужном мне сервисе обрабатываю эту ошбику как мне надо
- */
