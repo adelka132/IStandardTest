@@ -18,6 +18,7 @@ final class GraphicViewController: UIViewController {
 
     private lazy var graphicView: LineChartView = {
         let gView = LineChartView()
+        gView.translatesAutoresizingMaskIntoConstraints = false
         return gView
     }()
 
@@ -65,10 +66,12 @@ extension GraphicViewController: GraphicViewProtocol {
 
     func configureAppearence() {
         view.addSubview(tableView)
+        view.addSubview(graphicView)
         view.backgroundColor = .white
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
+
         makeConstraints()
     }
 
@@ -81,13 +84,23 @@ extension GraphicViewController: GraphicViewProtocol {
 
 private extension GraphicViewController {
     func makeConstraints() {
-        //let heightConstraint = NSLayoutConstraint(item: view1, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
-//        view1.addConstraint(heightConstraint)
+        let equalHeight = NSLayoutConstraint(item: tableView,
+                                             attribute: .height,
+                                             relatedBy: .equal,
+                                             toItem: graphicView,
+                                             attribute: .height,
+                                             multiplier: 1.0,
+                                             constant: 0.0)
         NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+
+            graphicView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            graphicView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            graphicView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            graphicView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
+            equalHeight
         ])
     }
 }
