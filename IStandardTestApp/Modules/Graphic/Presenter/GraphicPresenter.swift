@@ -1,4 +1,5 @@
 import Foundation
+import Charts
 
 protocol GraphicPresenterProtocol {
     var numberOfRows: Int { get }
@@ -6,22 +7,23 @@ protocol GraphicPresenterProtocol {
     func viewDidLoad()
     func viewDidAppear()
     func dataFor(row: Int) -> Point?
+    func getDataForGraphic() -> LineChartData
 }
 
 final class GraphicPresenter {
 
     weak var view: GraphicViewProtocol?
-    private let graphicData: GraphicData
+    private let points: [Point]
 
-    init(view: GraphicViewProtocol?, graphicData: GraphicData) {
+    init(view: GraphicViewProtocol?, points: [Point]) {
         self.view = view
-        self.graphicData = graphicData
+        self.points = points.sorted(by: <)
     }
 }
 
 extension GraphicPresenter: GraphicPresenterProtocol {
 
-    var numberOfRows: Int { graphicData.points.count }
+    var numberOfRows: Int { points.count }
 
     func viewDidLoad() {
         view?.configureAppearence()
@@ -29,15 +31,27 @@ extension GraphicPresenter: GraphicPresenterProtocol {
 
     func viewDidAppear() {
         view?.updateTableView()
+        view?.updateGraphic()
     }
 
-    func dataFor(row: Int) -> Point? {
-        graphicData.points[safe: row]
+    func dataFor(row: Int) -> Point? { points[safe: row] }
+
+    func getDataForGraphic() -> LineChartData {
+        let points = points.compactMap(ChartDataEntry.init)
+        let dataSet = LineChartDataSet(entries: points)
+        dataSet.mode = .cubicBezier
+        return LineChartData(dataSet: dataSet)
     }
 }
 
 extension Collection {
     subscript (safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
+    }
+}
+
+extension ChartDataEntry {
+    convenience init(_ points: Point) {
+        self.init(x: points.x, y: points.y)
     }
 }

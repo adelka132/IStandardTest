@@ -6,7 +6,7 @@ protocol MainPresenterProtocol {
 }
 
 enum MainRout {
-    case showGraphic(GraphicData)
+    case showGraphic([Point])
 }
 
 // MARK: - MainPresenter
@@ -35,9 +35,8 @@ final class MainPresenter {
             self.view?.stopSpinner()
             switch result {
             case .success(let success):
-                print(success.points)
                 DispatchQueue.main.async {
-                    self.completionHandler(.showGraphic(success))
+                    self.completionHandler(.showGraphic(success.points))
                 }
             case .failure(let failure):
                 print(failure.customMessage)
@@ -54,6 +53,6 @@ extension MainPresenter: MainPresenterProtocol {
     }
 
     func tapButton() {
-        fetchPoints(count: 4)
+        fetchPoints(count: 10)
     }
 }

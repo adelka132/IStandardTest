@@ -1,8 +1,10 @@
 import UIKit
+import Charts
 
 protocol GraphicViewProtocol: AnyObject {
     func configureAppearence()
     func updateTableView()
+    func updateGraphic()
 }
 
 final class GraphicViewController: UIViewController {
@@ -15,6 +17,25 @@ final class GraphicViewController: UIViewController {
         return tableView
     }()
 
+    private lazy var graphicView: LineChartView = {
+        let gView = LineChartView()
+        gView.backgroundColor = .systemBlue
+        gView.translatesAutoresizingMaskIntoConstraints = false
+        return gView
+    }()
+
+    // MARK: - Contstraints
+
+    private lazy var equalHeight = NSLayoutConstraint(item: graphicView,
+                                                      attribute: .height,
+                                                      relatedBy: .equal,
+                                                      toItem: tableView,
+                                                      attribute: .height,
+                                                      multiplier: 1.0,
+                                                      constant: 0.0)
+    private lazy var landscapeGraphcLeading = graphicView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+    private lazy var graphicLeading = graphicView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+
     // MARK: - UIViewController
 
     override func viewDidLoad() {
@@ -26,32 +47,18 @@ final class GraphicViewController: UIViewController {
         super.viewDidAppear(animated)
         presenter?.viewDidAppear()
     }
-}
 
-// MARK: - UITableViewDelegate
-
-extension GraphicViewController: UITableViewDelegate {
-    
-}
-
-// MARK: - UITableViewDataSource
-
-extension GraphicViewController: UITableViewDataSource {
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        presenter?.numberOfRows ?? 0
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? UITableViewCell else {
-            return UITableViewCell()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if view.window?.windowScene?.interfaceOrientation == .landscapeRight {
+            equalHeight.isActive = false
+            graphicLeading.isActive = false
+            landscapeGraphcLeading.isActive = true
+        } else {
+            equalHeight.isActive = true
+            graphicLeading.isActive = true
+            landscapeGraphcLeading.isActive = false
         }
-        guard let data = presenter?.dataFor(row: indexPath.row) else { return UITableViewCell() }
-        
-        var cellConfig = cell.defaultContentConfiguration()
-        cellConfig.text = "x: \(data.x) y: \(data.y)"
-        cell.contentConfiguration = cellConfig
-        return cell
     }
 }
 
@@ -61,15 +68,41 @@ extension GraphicViewController: GraphicViewProtocol {
 
     func configureAppearence() {
         view.addSubview(tableView)
+        view.addSubview(graphicView)
         view.backgroundColor = .white
+
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
+
         makeConstraints()
     }
 
     func updateTableView() {
         DispatchQueue.main.async { self.tableView.reloadData() }
+    }
+
+    func updateGraphic() {
+        graphicView.data = presenter?.getDataForGraphic()
+    }
+}
+
+// MARK: - UITableViewDataSource, UITableViewDelegate
+
+extension GraphicViewController: UITableViewDataSource, UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        presenter?.numberOfRows ?? 0
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: GraphicCell.identifier, for: indexPath) as? GraphicCell,
+            let data = presenter?.dataFor(row: indexPath.row)
+        else { return UITableViewCell() }
+
+        cell.set(model: data)
+        return cell
     }
 }
 
@@ -78,10 +111,14 @@ extension GraphicViewController: GraphicViewProtocol {
 private extension GraphicViewController {
     func makeConstraints() {
         NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+
+            graphicView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            graphicView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            graphicView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
+            equalHeight
         ])
     }
 }
