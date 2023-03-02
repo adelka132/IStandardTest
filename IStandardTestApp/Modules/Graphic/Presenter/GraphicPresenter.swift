@@ -4,7 +4,6 @@ import Charts
 protocol GraphicPresenterProtocol {
     var numberOfRows: Int { get }
 
-    func viewDidLoad()
     func viewDidAppear()
     func dataFor(row: Int) -> Point?
     func getDataForGraphic() -> LineChartData
@@ -24,10 +23,6 @@ final class GraphicPresenter {
 extension GraphicPresenter: GraphicPresenterProtocol {
 
     var numberOfRows: Int { points.count }
-
-    func viewDidLoad() {
-        view?.configureAppearence()
-    }
 
     func viewDidAppear() {
         view?.updateTableView()

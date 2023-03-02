@@ -2,7 +2,6 @@ import UIKit
 import Charts
 
 protocol GraphicViewProtocol: AnyObject {
-    func configureAppearence()
     func updateTableView()
     func updateGraphic()
 }
@@ -34,7 +33,7 @@ final class GraphicViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter?.viewDidLoad()
+        configureAppearence()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -59,17 +58,6 @@ final class GraphicViewController: UIViewController {
 // MARK: - GraphicViewProtocol
 
 extension GraphicViewController: GraphicViewProtocol {
-
-    func configureAppearence() {
-        view.addSubview(tableView, graphicView)
-        view.backgroundColor = .systemBackground
-
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
-
-        makeConstraints()
-    }
 
     func updateTableView() {
         tableView.reloadData()
@@ -102,6 +90,18 @@ extension GraphicViewController: UITableViewDataSource, UITableViewDelegate {
 // MARK: - Private Methods
 
 private extension GraphicViewController {
+
+    func configureAppearence() {
+        view.addSubview(tableView, graphicView)
+        view.backgroundColor = .systemBackground
+
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
+
+        makeConstraints()
+    }
+
     func makeConstraints() {
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
