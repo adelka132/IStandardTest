@@ -28,7 +28,7 @@ final class MainPresenter {
 
     func fetchPoints(count: Int) {
         view?.startSpinner()
-        Task(priority: .background) { [weak self] in
+        Task { [weak self] in
             guard let self = self else { return }
             let result = await networkService.getPoints(count: count)
 

@@ -11,13 +11,13 @@ final class GraphicViewController: UIViewController {
 
     var presenter: GraphicPresenterProtocol?
 
-    private lazy var tableView: UITableView = {
+    private let tableView: UITableView = {
         var tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
 
-    private lazy var graphicView: LineChartView = {
+    private let graphicView: LineChartView = {
         let gView = LineChartView()
         gView.backgroundColor = .systemBlue
         gView.translatesAutoresizingMaskIntoConstraints = false
@@ -67,8 +67,7 @@ final class GraphicViewController: UIViewController {
 extension GraphicViewController: GraphicViewProtocol {
 
     func configureAppearence() {
-        view.addSubview(tableView)
-        view.addSubview(graphicView)
+        view.addSubview(tableView, graphicView)
         view.backgroundColor = .systemBackground
 
         tableView.delegate = self
@@ -79,7 +78,9 @@ extension GraphicViewController: GraphicViewProtocol {
     }
 
     func updateTableView() {
-        DispatchQueue.main.async { self.tableView.reloadData() }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 
     func updateGraphic() {

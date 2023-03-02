@@ -41,6 +41,10 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         presenter?.viewDidLoad()
     }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 
 extension MainViewController: MainViewProtocol {
@@ -76,9 +80,7 @@ extension MainViewController: MainViewProtocol {
 private extension MainViewController {
 
     func addSubviews() {
-        view.addSubview(textField)
-        view.addSubview(goButton)
-        view.addSubview(spinner)
+        view.addSubview(textField, goButton, spinner)
     }
 
     func makeConstraints() {
@@ -137,16 +139,5 @@ private extension MainViewController {
                 view.layoutIfNeeded()
             }
         }
-    }
-}
-
-extension Data {
-    var prettyJson: NSString? {
-        guard let object = try? JSONSerialization.jsonObject(with: self, options: []),
-              let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
-              let prettyPrintedString = NSString(data: data,
-                                                 encoding: String.Encoding.utf8.rawValue) else { return nil }
-
-        return prettyPrintedString
     }
 }
