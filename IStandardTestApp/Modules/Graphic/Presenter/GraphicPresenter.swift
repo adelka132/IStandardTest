@@ -3,33 +3,30 @@ import Charts
 
 protocol GraphicPresenterProtocol {
     var numberOfRows: Int { get }
-
-    func viewDidAppear()
-    func dataFor(row: Int) -> Point?
+    var points: [Point] { get }
+    func viewDidLoad()
     func getDataForGraphic() -> LineChartData
 }
 
 final class GraphicPresenter {
 
     weak var view: GraphicViewProtocol?
-    private let points: [Point]
+    let points: [Point]
 
     init(view: GraphicViewProtocol?, points: [Point]) {
         self.view = view
-        self.points = points.sorted(by: <)
+        self.points = points.sorted(by: { $0.x < $1.x })
     }
 }
 
 extension GraphicPresenter: GraphicPresenterProtocol {
 
     var numberOfRows: Int { points.count }
-
-    func viewDidAppear() {
+    
+    func viewDidLoad() {
         view?.updateTableView()
         view?.updateGraphic()
     }
-
-    func dataFor(row: Int) -> Point? { points[safe: row] }
 
     func getDataForGraphic() -> LineChartData {
         let points = points.compactMap(ChartDataEntry.init)

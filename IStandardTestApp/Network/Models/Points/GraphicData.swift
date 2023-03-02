@@ -6,8 +6,6 @@ struct GraphicData: Codable {
 }
 
 // MARK: - Point
-struct Point: Codable {
+struct Point: Codable, Hashable {
     let x, y: Double
-
-    static func < (lhs: Point, rhs: Point) -> Bool { lhs.x < rhs.x }
 }
