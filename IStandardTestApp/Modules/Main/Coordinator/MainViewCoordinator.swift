@@ -1,7 +1,7 @@
 import UIKit
 
 protocol MainViewCoordinatorProtocol: AnyObject {
-    func showGraphic(with data: GraphicData)
+    func showGraphic(with points: [Point])
 }
 
 final class MainViewCoordinator: Coordinator {
@@ -20,8 +20,8 @@ final class MainViewCoordinator: Coordinator {
         let presenter = MainPresenter(view: viewController,
                                       networkService: service) { [weak self] rout in
             switch rout {
-            case .showGraphic(let data):
-                self?.showGraphic(with: data)
+            case .showGraphic(let points):
+                self?.showGraphic(with: points)
             }
         }
         viewController.presenter = presenter
@@ -30,9 +30,9 @@ final class MainViewCoordinator: Coordinator {
 }
 
 extension MainViewCoordinator: MainViewCoordinatorProtocol {
-    func showGraphic(with data: GraphicData) {
+    func showGraphic(with points: [Point]) {
         let viewController = GraphicViewController()
-        let presenter = GraphicPresenter(view: viewController, graphicData: data)
+        let presenter = GraphicPresenter(view: viewController, points: points)
         viewController.presenter = presenter
         navigationController.pushViewController(viewController, animated: true)
     }

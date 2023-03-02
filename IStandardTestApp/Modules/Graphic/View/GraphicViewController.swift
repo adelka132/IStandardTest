@@ -4,6 +4,7 @@ import Charts
 protocol GraphicViewProtocol: AnyObject {
     func configureAppearence()
     func updateTableView()
+    func updateGraphic()
 }
 
 final class GraphicViewController: UIViewController {
@@ -18,6 +19,7 @@ final class GraphicViewController: UIViewController {
 
     private lazy var graphicView: LineChartView = {
         let gView = LineChartView()
+        gView.backgroundColor = .systemBlue
         gView.translatesAutoresizingMaskIntoConstraints = false
         return gView
     }()
@@ -35,15 +37,35 @@ final class GraphicViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDelegate
+// MARK: - GraphicViewProtocol
 
-extension GraphicViewController: UITableViewDelegate {
-    
+extension GraphicViewController: GraphicViewProtocol {
+
+    func configureAppearence() {
+        view.addSubview(tableView)
+        view.addSubview(graphicView)
+        view.backgroundColor = .white
+
+        graphicView.delegate = self
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
+
+        makeConstraints()
+    }
+
+    func updateTableView() {
+        DispatchQueue.main.async { self.tableView.reloadData() }
+    }
+
+    func updateGraphic() {
+        graphicView.data = presenter?.getDataForGraphic()
+    }
 }
 
-// MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource, UITableViewDelegate
 
-extension GraphicViewController: UITableViewDataSource {
+extension GraphicViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         presenter?.numberOfRows ?? 0
@@ -60,23 +82,11 @@ extension GraphicViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - GraphicViewProtocol
+// MARK: -
 
-extension GraphicViewController: GraphicViewProtocol {
-
-    func configureAppearence() {
-        view.addSubview(tableView)
-        view.addSubview(graphicView)
-        view.backgroundColor = .white
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
-
-        makeConstraints()
-    }
-
-    func updateTableView() {
-        DispatchQueue.main.async { self.tableView.reloadData() }
+extension GraphicViewController: ChartViewDelegate {
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        print(entry)
     }
 }
 
