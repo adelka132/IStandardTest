@@ -16,7 +16,6 @@
 		7D237AAD29AA2ABE00A90EBA /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237AAC29AA2ABE00A90EBA /* Coordinator.swift */; };
 		7D237AB229AA2CC100A90EBA /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237AB129AA2CC100A90EBA /* MainPresenter.swift */; };
 		7D237AB529AA33B400A90EBA /* MainViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237AB429AA33B400A90EBA /* MainViewCoordinator.swift */; };
-		7D237AB829AAF60800A90EBA /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237AB729AAF60800A90EBA /* Optional+Extension.swift */; };
 		7D237B0C29ACB1AE00A90EBA /* HTTPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237B0629ACB1AD00A90EBA /* HTTPError.swift */; };
 		7D237B0D29ACB1AE00A90EBA /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237B0729ACB1AD00A90EBA /* HTTPClient.swift */; };
 		7D237B0E29ACB1AE00A90EBA /* PointsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237B0829ACB1AE00A90EBA /* PointsEndpoint.swift */; };
@@ -47,7 +46,6 @@
 		7D237AAC29AA2ABE00A90EBA /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		7D237AB129AA2CC100A90EBA /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
 		7D237AB429AA33B400A90EBA /* MainViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewCoordinator.swift; sourceTree = "<group>"; };
-		7D237AB729AAF60800A90EBA /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
 		7D237B0629ACB1AD00A90EBA /* HTTPError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPError.swift; sourceTree = "<group>"; };
 		7D237B0729ACB1AD00A90EBA /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		7D237B0829ACB1AE00A90EBA /* PointsEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointsEndpoint.swift; sourceTree = "<group>"; };
@@ -123,7 +121,6 @@
 		7D237AB629AAF5F800A90EBA /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				7D237AB729AAF60800A90EBA /* Optional+Extension.swift */,
 				7D237B6A29B0D50500A90EBA /* UITableViewCell+Extension.swift */,
 				7D237B6E29B0D63400A90EBA /* UIView+Extension.swift */,
 				7D237B7629B0D95A00A90EBA /* Collection+Extension.swift */,
@@ -347,7 +344,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D237AB829AAF60800A90EBA /* Optional+Extension.swift in Sources */,
 				7D237B7729B0D95A00A90EBA /* Collection+Extension.swift in Sources */,
 				7D237B0C29ACB1AE00A90EBA /* HTTPError.swift in Sources */,
 				7D237B1129ACB1AE00A90EBA /* HTTPMethod.swift in Sources */,
