@@ -8,7 +8,7 @@ protocol GraphicPresenterProtocol {
 
 final class GraphicPresenter {
 
-    weak var view: GraphicViewProtocol?
+    private weak var view: GraphicViewProtocol?
     let points: [Point]
 
     init(view: GraphicViewProtocol?, points: [Point]) {
@@ -17,7 +17,7 @@ final class GraphicPresenter {
     }
 
     private func getDataForGraphic() -> LineChartData {
-        let points = points.compactMap(ChartDataEntry.init)
+        let points = points.map(ChartDataEntry.init)
         let dataSet = LineChartDataSet(entries: points)
         dataSet.mode = .cubicBezier
         return LineChartData(dataSet: dataSet)
@@ -27,7 +27,7 @@ final class GraphicPresenter {
 extension GraphicPresenter: GraphicPresenterProtocol {
 
     func viewDidLoad() {
-        view?.updateTableView()
+        view?.configureTableView(by: points)
 
         let data = getDataForGraphic()
         view?.updateGraphic(with: data)

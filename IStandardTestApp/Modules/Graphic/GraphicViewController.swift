@@ -2,7 +2,7 @@ import UIKit
 import Charts
 
 protocol GraphicViewProtocol: AnyObject {
-    func updateTableView()
+    func configureTableView(by model: [Point])
     func updateGraphic(with data: LineChartData)
 }
 
@@ -50,21 +50,9 @@ final class GraphicViewController: UIViewController {
         presenter?.viewDidLoad()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if view.window?.windowScene?.interfaceOrientation == .landscapeRight {
-            equalHeight.isActive = false
-            graphicLeading.isActive = false
-            landscapeGraphcLeading.isActive = true
-        } else {
-            equalHeight.isActive = true
-            graphicLeading.isActive = true
-            landscapeGraphcLeading.isActive = false
-        }
+        updateConstraintsForLadnscape()
     }
 }
 
@@ -72,12 +60,15 @@ final class GraphicViewController: UIViewController {
 
 extension GraphicViewController: GraphicViewProtocol {
 
-    func updateTableView() {
-        configure(by: presenter?.points ?? [])
-    }
-
     func updateGraphic(with data: LineChartData) {
         graphicView.data = data
+    }
+
+    func configureTableView(by model: [Point]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Point>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(model, toSection: 0)
+        setPointsTableViewDataSource.apply(snapshot)
     }
 }
 
@@ -112,11 +103,16 @@ private extension GraphicViewController {
         ])
     }
 
-    func configure(by model: [Point]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Point>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(model, toSection: 0)
-        setPointsTableViewDataSource.apply(snapshot)
+    func updateConstraintsForLadnscape() {
+        if UIDevice.current.orientation.isLandscape {
+            equalHeight.isActive = false
+            graphicLeading.isActive = false
+            landscapeGraphcLeading.isActive = true
+        } else {
+            equalHeight.isActive = true
+            graphicLeading.isActive = true
+            landscapeGraphcLeading.isActive = false
+        }
     }
 
     @objc func screenshotTapped() {
