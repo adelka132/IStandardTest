@@ -11,14 +11,22 @@ protocol GraphicViewProtocol: AnyObject {
 final class GraphicViewController: UIViewController {
 
     var presenter: GraphicPresenterProtocol?
+    
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
 
-    private let tableView: UITableView = {
-        var tableView = UITableView()
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
 
-    private let graphicView: LineChartView = {
+    private lazy var graphicView: LineChartView = {
         let gView = LineChartView()
         gView.backgroundColor = .systemBlue
         gView.translatesAutoresizingMaskIntoConstraints = false
@@ -36,13 +44,7 @@ final class GraphicViewController: UIViewController {
             return cell
         }
     }()
-
-    // MARK: - Contstraints
-
-    private lazy var equalHeight = graphicView.heightAnchor.constraint(equalTo: tableView.heightAnchor)
-    private lazy var graphicLeading = graphicView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-    private lazy var landscapeGraphcLeading = graphicView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-
+    
     // MARK: - UIViewController
 
     override func viewDidLoad() {
@@ -52,9 +54,8 @@ final class GraphicViewController: UIViewController {
         presenter?.viewDidLoad()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updateConstraintsForLadnscape()
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        updateViewsForOrientation()
     }
 }
 
@@ -95,7 +96,8 @@ extension GraphicViewController: GraphicViewProtocol {
 private extension GraphicViewController {
 
     func configureAppearence() {
-        view.addSubviews(tableView, graphicView)
+        view.addSubview(stackView)
+        [tableView, graphicView].forEach { stackView.addArrangedSubview($0) }
         view.backgroundColor = .systemBackground
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Screenshot",
                                                             style: .plain,
@@ -109,28 +111,15 @@ private extension GraphicViewController {
 
     func makeConstraints() {
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            graphicView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            graphicView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            graphicLeading,
-            graphicView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
-            equalHeight
+            stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 
-    func updateConstraintsForLadnscape() {
-        if UIDevice.current.orientation.isLandscape {
-            equalHeight.isActive = false
-            graphicLeading.isActive = false
-            landscapeGraphcLeading.isActive = true
-        } else {
-            equalHeight.isActive = true
-            graphicLeading.isActive = true
-            landscapeGraphcLeading.isActive = false
-        }
+    func updateViewsForOrientation() {
+        tableView.isHidden = UIDevice.current.orientation.isLandscape
     }
 
     @objc func screenshotTapped() {
