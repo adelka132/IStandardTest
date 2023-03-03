@@ -3,7 +3,7 @@ import UIKit
 protocol MainViewProtocol: AnyObject {
     func startSpinner()
     func stopSpinner()
-    func showError(with message: String)
+    func showAlert(title: String, message: String)
 }
 
 final class MainViewController: UIViewController {
@@ -62,8 +62,8 @@ extension MainViewController: MainViewProtocol {
         spinner.stopAnimating()
     }
 
-    func showError(with message: String) {
-        let alertView = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+    func showAlert(title: String, message: String) {
+        let alertView = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "Ок", style: .default)
         alertView.addAction(alertAction)
         present(alertView, animated: true)
@@ -121,7 +121,7 @@ private extension MainViewController {
             let text = pointsTextField.text,
             let count = Int(text)
         else {
-            showError(with: "Введите число")
+            showAlert(title: "Ошибка", message: "Введите число")
             return
         }
         presenter?.tapButton(count: count)

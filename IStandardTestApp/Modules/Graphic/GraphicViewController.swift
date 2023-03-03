@@ -4,6 +4,8 @@ import Charts
 protocol GraphicViewProtocol: AnyObject {
     func configureTableView(by model: [Point])
     func updateGraphic(with data: LineChartData)
+    func showAlert(title: String, message: String)
+    func makeScreenshot()
 }
 
 final class GraphicViewController: UIViewController {
@@ -70,6 +72,27 @@ extension GraphicViewController: GraphicViewProtocol {
         snapshot.appendItems(model, toSection: 0)
         setPointsTableViewDataSource.apply(snapshot)
     }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        updateConstraintsForLadnscape()
+    }
+
+    func makeScreenshot() {
+        if let image = graphicView.getChartImage(transparent: true) {
+            UIImageWriteToSavedPhotosAlbum(image,
+                                           self,
+                                           #selector(image(_:didFinishSavingWithError:contextInfo:)),
+                                           nil)
+        }
+    }
+
+    func showAlert(title: String, message: String) {
+        let alertView = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Ок", style: .default)
+        alertView.addAction(alertAction)
+        present(alertView, animated: true)
+    }
 }
 
 // MARK: - Private Methods
@@ -116,26 +139,10 @@ private extension GraphicViewController {
     }
 
     @objc func screenshotTapped() {
-        if let image = graphicView.getChartImage(transparent: true) {
-            UIImageWriteToSavedPhotosAlbum(image,
-                                           self,
-                                           #selector(image(_:didFinishSavingWithError:contextInfo:)),
-                                           nil)
-        }
+        presenter?.tappedScreenshot()
     }
 
     @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        if let error = error {
-            showAlert(title: "Ошибка", message: error.localizedDescription)
-        } else {
-            showAlert(title: "Успешно", message: "Скриншот сохранён")
-        }
-    }
-
-    func showAlert(title: String, message: String) {
-        let alertView = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "Ок", style: .default)
-        alertView.addAction(alertAction)
-        present(alertView, animated: true)
+        presenter?.didFinishSavingImage(error)
     }
 }

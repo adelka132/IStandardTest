@@ -8,7 +8,7 @@ protocol MainPresenterProtocol {
 
 final class MainPresenter {
 
-    weak var view: MainViewProtocol?
+    private weak var view: MainViewProtocol?
     private let networkService: PointService
     private let completionHandler: (MainRoute) -> Void
 
@@ -34,7 +34,7 @@ final class MainPresenter {
         case .success(let success):
             self.completionHandler(.showGraphic(success.points))
         case .failure(let failure):
-            self.view?.showError(with: failure.localizedDescription)
+            self.view?.showAlert(title: "Ошибка", message: failure.localizedDescription)
         }
     }
 }

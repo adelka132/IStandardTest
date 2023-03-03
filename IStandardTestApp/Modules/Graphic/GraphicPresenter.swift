@@ -4,6 +4,8 @@ import Charts
 protocol GraphicPresenterProtocol {
     var points: [Point] { get }
     func viewDidLoad()
+    func tappedScreenshot()
+    func didFinishSavingImage(_ error: Error?)
 }
 
 final class GraphicPresenter {
@@ -31,6 +33,18 @@ extension GraphicPresenter: GraphicPresenterProtocol {
 
         let data = getDataForGraphic()
         view?.updateGraphic(with: data)
+    }
+
+    func didFinishSavingImage(_ error: Error?) {
+        if let error = error {
+            view?.showAlert(title: "Ошибка", message: error.localizedDescription)
+        } else {
+            view?.showAlert(title: "Успешно", message: "Скриншот сохранён в фото")
+        }
+    }
+
+    func tappedScreenshot() {
+        view?.makeScreenshot()
     }
 }
 
