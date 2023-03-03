@@ -4,10 +4,6 @@ protocol MainPresenterProtocol {
     func tapButton(count points: Int)
 }
 
-enum MainRoute {
-    case showGraphic([Point])
-}
-
 // MARK: - MainPresenter
 
 final class MainPresenter {

@@ -10,7 +10,7 @@ final class MainViewController: UIViewController {
 
     var presenter: MainPresenterProtocol?
 
-    private let textField: UITextField = {
+    private let pointsTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Сколько точек?"
@@ -77,7 +77,7 @@ private extension MainViewController {
     func configureAppearence() {
         view.backgroundColor = .systemBackground
         goButton.addTarget(self, action: #selector(goButtonPressed), for: .touchUpInside)
-        addSubviews()
+        addingSubviews()
         makeConstraints()
 
         NotificationCenter.default.addObserver(self,
@@ -91,16 +91,16 @@ private extension MainViewController {
                                                object: nil)
     }
 
-    func addSubviews() {
-        view.addSubview(textField, goButton, spinner)
+    func addingSubviews() {
+        view.addSubviews(pointsTextField, goButton, spinner)
     }
 
     func makeConstraints() {
         NSLayoutConstraint.activate([
-            textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16.0),
-            textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16.0),
-            textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16.0),
-            textField.heightAnchor.constraint(equalToConstant: 44.0),
+            pointsTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16.0),
+            pointsTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16.0),
+            pointsTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16.0),
+            pointsTextField.heightAnchor.constraint(equalToConstant: 44.0),
 
             goButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             goButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50.0),
@@ -116,9 +116,9 @@ private extension MainViewController {
     }
 
     @objc func goButtonPressed() {
-        defer { textField.resignFirstResponder() }
+        defer { pointsTextField.resignFirstResponder() }
         guard
-            let text = textField.text,
+            let text = pointsTextField.text,
             let count = Int(text)
         else {
             showError(with: "Введите число")

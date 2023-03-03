@@ -1,5 +1,9 @@
 import UIKit
 
+enum MainRoute {
+    case showGraphic([Point])
+}
+
 protocol MainViewCoordinatorProtocol: AnyObject {
     func showGraphic(with points: [Point])
 }

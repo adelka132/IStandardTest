@@ -7,5 +7,6 @@ struct GraphicData: Codable {
 
 // MARK: - Point
 struct Point: Codable, Hashable {
-    let x, y: Double
+    let x: Double
+    let y: Double
 }

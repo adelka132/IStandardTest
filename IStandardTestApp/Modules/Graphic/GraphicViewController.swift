@@ -77,7 +77,7 @@ extension GraphicViewController: GraphicViewProtocol {
 private extension GraphicViewController {
 
     func configureAppearence() {
-        view.addSubview(tableView, graphicView)
+        view.addSubviews(tableView, graphicView)
         view.backgroundColor = .systemBackground
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Screenshot",
                                                             style: .plain,

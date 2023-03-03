@@ -8,7 +8,6 @@ protocol Coordinator: AnyObject {
     func start()
 }
 
-// Опционально, сказать что у нас 0999999 координаторов и мб понадобиться
 extension Coordinator {
     func removeChildCoordinator(_ coordinator: Coordinator) {
         guard let index = coordinators.firstIndex(where: { $0 === coordinator }) else { return }
