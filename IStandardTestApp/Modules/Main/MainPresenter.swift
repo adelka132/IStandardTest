@@ -1,7 +1,7 @@
 import Foundation
 
 protocol MainPresenterProtocol {
-    func tapButton(count points: Int)
+    func tapButton(count points: String?)
 }
 
 // MARK: - MainPresenter
@@ -42,9 +42,17 @@ final class MainPresenter {
 // MARK: - MainPresenterProtocol
 
 extension MainPresenter: MainPresenterProtocol {
-    func tapButton(count points: Int) {
+    func tapButton(count points: String?) {
+        guard
+            let points = points,
+            let intPoints = Int(points)
+        else {
+            view?.showAlert(title: "Ошибка", message: "Введите число")
+            return
+        }
+
         Task { [weak self] in
-            await self?.fetchPoints(count: points)
+            await self?.fetchPoints(count: intPoints)
         }
     }
 }

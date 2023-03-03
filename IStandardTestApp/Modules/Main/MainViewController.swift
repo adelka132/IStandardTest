@@ -8,6 +8,17 @@ protocol MainViewProtocol: AnyObject {
 
 final class MainViewController: UIViewController {
 
+    struct Constants {
+        static let pointsTextFieldDefault: CGFloat = 16.0
+        static let pointsTextFieldHeight: CGFloat = 44.0
+
+        static let goButtonDefaultIndent: CGFloat = 50.0
+        static let goButtonHeight: CGFloat = 44.0
+        static let goButtonBottom: CGFloat = 16.0
+
+        static let spinnerHeight: CGFloat = 50.0
+    }
+
     var presenter: MainPresenterProtocol?
 
     private let pointsTextField: UITextField = {
@@ -35,16 +46,12 @@ final class MainViewController: UIViewController {
         return spinner
     }()
 
-    private lazy var bottomButtonConstraint: NSLayoutConstraint = goButton.bottomAnchor.constraint(
-        equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16.0)
+    private lazy var bottomButtonConstraint: NSLayoutConstraint = goButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                                                                                                   constant: Constants.goButtonBottom.negative)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureAppearence()
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 }
 
@@ -103,38 +110,34 @@ private extension MainViewController {
 
     func makeConstraints() {
         NSLayoutConstraint.activate([
-            pointsTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16.0),
-            pointsTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16.0),
-            pointsTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16.0),
-            pointsTextField.heightAnchor.constraint(equalToConstant: 44.0),
+            pointsTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                                 constant: Constants.pointsTextFieldDefault),
+            pointsTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                     constant: Constants.pointsTextFieldDefault),
+            pointsTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                      constant: Constants.pointsTextFieldDefault.negative),
+            pointsTextField.heightAnchor.constraint(equalToConstant: Constants.pointsTextFieldHeight),
 
-            goButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            goButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50.0),
-            goButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50.0),
+            goButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                              constant: Constants.goButtonDefaultIndent),
+            goButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                               constant: Constants.goButtonDefaultIndent.negative),
             bottomButtonConstraint,
-            goButton.heightAnchor.constraint(equalToConstant: 44.0),
+            goButton.heightAnchor.constraint(equalToConstant: Constants.goButtonHeight),
 
             spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            spinner.heightAnchor.constraint(equalToConstant: 50.0),
+            spinner.heightAnchor.constraint(equalToConstant: Constants.spinnerHeight),
             spinner.widthAnchor.constraint(equalTo: spinner.heightAnchor)
         ])
     }
 
     @objc func goButtonPressed() {
-        defer { pointsTextField.resignFirstResponder() }
-        guard
-            let text = pointsTextField.text,
-            let count = Int(text)
-        else {
-            showAlert(title: "Ошибка", message: "Введите число")
-            return
-        }
-        presenter?.tapButton(count: count)
+        presenter?.tapButton(count: pointsTextField.text)
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
-        bottomButtonConstraint.constant = -16
+        bottomButtonConstraint.constant = Constants.goButtonBottom.negative
         view.layoutIfNeeded()
     }
 
@@ -142,25 +145,25 @@ private extension MainViewController {
         view.endEditing(true)
     }
 
-    @objc func keyboardWillShow(notification : Notification?) -> Void {
-        
-        var _kbSize: CGSize
-        
+    @objc func keyboardWillShow(notification : Notification?) {
+
         if let info = notification?.userInfo {
-            
+
             let frameEndUserInfoKey = UIResponder.keyboardFrameEndUserInfoKey
-            
+
             if let kbFrame = info[frameEndUserInfoKey] as? CGRect {
-                
+
                 let screenSize = UIScreen.main.bounds
                 let intersectRect = kbFrame.intersection(screenSize)
-                
+
+                let _kbSize: CGSize
                 if intersectRect.isNull {
                     _kbSize = CGSize(width: screenSize.size.width, height: 0)
                 } else {
                     _kbSize = intersectRect.size
                 }
-                bottomButtonConstraint.constant = -16 - _kbSize.height
+
+                bottomButtonConstraint.constant = Constants.goButtonBottom.negative - _kbSize.height
                 view.layoutIfNeeded()
             }
         }
