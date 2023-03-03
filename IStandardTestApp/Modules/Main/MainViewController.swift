@@ -9,11 +9,11 @@ protocol MainViewProtocol: AnyObject {
 final class MainViewController: UIViewController {
 
     struct Constants {
-        static let pointsTextFieldDefault: CGFloat = 16.0
-        static let pointsTextFieldHeight: CGFloat = 44.0
+        static let pointsTextFieldDefault: CGFloat = 50.0
+        static let pointsTextFieldHeight: CGFloat = 56.0
 
         static let goButtonDefaultIndent: CGFloat = 50.0
-        static let goButtonHeight: CGFloat = 44.0
+        static let goButtonHeight: CGFloat = 56.0
         static let goButtonBottom: CGFloat = 16.0
 
         static let spinnerHeight: CGFloat = 50.0
@@ -26,16 +26,32 @@ final class MainViewController: UIViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Сколько точек?"
         textField.keyboardType = .numberPad
-        textField.backgroundColor = .gray
+        textField.backgroundColor = .white
+        textField.leftView = UIView(frame: CGRectMake(0, 0, 10, 20))
+        textField.leftViewMode = .always
+        textField.layer.cornerRadius = 10
+        textField.layer.borderColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1).cgColor
+        textField.layer.borderWidth = 2
+        textField.layer.shadowColor = UIColor.black.cgColor
+        textField.layer.shadowRadius = 10
+        textField.layer.shadowOpacity = 0.2
+        textField.tintColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1)
+        textField.textColor = UIColor(red: 44 / 255, green: 56 / 255, blue: 68 / 255, alpha: 1)
+        textField.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         return textField
     }()
 
     private let goButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Поехали", for: .normal)
-        button.setTitleColor(.yellow, for: .normal)
-        button.backgroundColor = .gray
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        button.setTitle("ПОЕХАЛИ", for: .normal)
+        button.setTitleColor(UIColor(red: 44 / 255, green: 56 / 255, blue: 68 / 255, alpha: 1), for: .normal)
+        button.backgroundColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1)
+        button.layer.cornerRadius = 10
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowRadius = 20
+        button.layer.shadowOpacity = 0.5
         return button
     }()
 
@@ -43,6 +59,7 @@ final class MainViewController: UIViewController {
         let spinner = UIActivityIndicatorView(style: .large)
         spinner.hidesWhenStopped = true
         spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.color = .white
         return spinner
     }()
 
@@ -84,7 +101,7 @@ extension MainViewController: MainViewProtocol {
 private extension MainViewController {
 
     func configureAppearence() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemCyan
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
