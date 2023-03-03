@@ -73,11 +73,6 @@ extension GraphicViewController: GraphicViewProtocol {
         setPointsTableViewDataSource.apply(snapshot)
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        updateConstraintsForLadnscape()
-    }
-
     func makeScreenshot() {
         if let image = graphicView.getChartImage(transparent: true) {
             UIImageWriteToSavedPhotosAlbum(image,
