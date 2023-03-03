@@ -146,26 +146,13 @@ private extension MainViewController {
     }
 
     @objc func keyboardWillShow(notification : Notification?) {
+        if let kbFrame = notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            let screenSize = UIScreen.main.bounds
+            let intersectRect = kbFrame.intersection(screenSize)
 
-        if let info = notification?.userInfo {
-
-            let frameEndUserInfoKey = UIResponder.keyboardFrameEndUserInfoKey
-
-            if let kbFrame = info[frameEndUserInfoKey] as? CGRect {
-
-                let screenSize = UIScreen.main.bounds
-                let intersectRect = kbFrame.intersection(screenSize)
-
-                let _kbSize: CGSize
-                if intersectRect.isNull {
-                    _kbSize = CGSize(width: screenSize.size.width, height: 0)
-                } else {
-                    _kbSize = intersectRect.size
-                }
-
-                bottomButtonConstraint.constant = Constants.goButtonBottom.negative - _kbSize.height
-                view.layoutIfNeeded()
-            }
+            let kbSize = intersectRect.isNull ? CGSize(width: screenSize.size.width, height: 0) : intersectRect.size
+            bottomButtonConstraint.constant = Constants.goButtonBottom.negative - kbSize.height
+            view.layoutIfNeeded()
         }
     }
 }

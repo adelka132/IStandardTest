@@ -24,7 +24,7 @@ final class MainPresenter {
     }
 
     @MainActor
-    func fetchPoints(count: Int) async {
+    private func fetchPoints(count: Int) async {
         view?.startLoading()
         defer { view?.stopLoading() }
 
