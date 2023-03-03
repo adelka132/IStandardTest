@@ -2,7 +2,6 @@ import Foundation
 import Charts
 
 protocol GraphicPresenterProtocol {
-    var points: [Point] { get }
     func viewDidLoad()
     func tappedScreenshot()
     func didFinishSavingImage(_ error: Error?)
@@ -11,7 +10,7 @@ protocol GraphicPresenterProtocol {
 final class GraphicPresenter {
 
     private weak var view: GraphicViewProtocol?
-    let points: [Point]
+    private let points: [Point]
 
     init(view: GraphicViewProtocol?, points: [Point]) {
         self.view = view

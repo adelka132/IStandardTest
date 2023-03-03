@@ -76,6 +76,10 @@ private extension MainViewController {
 
     func configureAppearence() {
         view.backgroundColor = .systemBackground
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+
         goButton.addTarget(self, action: #selector(goButtonPressed), for: .touchUpInside)
         addingSubviews()
         makeConstraints()
@@ -132,6 +136,10 @@ private extension MainViewController {
         view.layoutIfNeeded()
     }
 
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+
     @objc func keyboardWillShow(notification : Notification?) -> Void {
         
         var _kbSize: CGSize
@@ -150,7 +158,7 @@ private extension MainViewController {
                 } else {
                     _kbSize = intersectRect.size
                 }
-                bottomButtonConstraint.constant -= _kbSize.height
+                bottomButtonConstraint.constant = -16 - _kbSize.height
                 view.layoutIfNeeded()
             }
         }

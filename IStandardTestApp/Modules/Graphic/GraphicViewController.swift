@@ -8,7 +8,7 @@ protocol GraphicViewProtocol: AnyObject {
     func makeScreenshot()
 }
 
-final class GraphicViewController: UIViewController {
+final class GraphicViewController: UIViewController, UITableViewDelegate {
 
     var presenter: GraphicPresenterProtocol?
     
@@ -57,6 +57,10 @@ final class GraphicViewController: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         updateViewsForOrientation()
     }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
 
 // MARK: - GraphicViewProtocol
@@ -104,6 +108,7 @@ private extension GraphicViewController {
                                                             target: self,
                                                             action: #selector(screenshotTapped))
 
+        tableView.delegate = self
         tableView.dataSource = setPointsTableViewDataSource
         tableView.register(GraphicCell.self, forCellReuseIdentifier: GraphicCell.identifier)
         makeConstraints()
