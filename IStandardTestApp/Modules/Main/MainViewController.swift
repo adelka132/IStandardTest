@@ -1,8 +1,8 @@
 import UIKit
 
 protocol MainViewProtocol: AnyObject {
-    func startSpinner()
-    func stopSpinner()
+    func startLoading()
+    func stopLoading()
     func showAlert(title: String, message: String)
 }
 
@@ -52,13 +52,15 @@ final class MainViewController: UIViewController {
 
 extension MainViewController: MainViewProtocol {
 
-    func startSpinner() {
+    func startLoading() {
         goButton.isEnabled = false
+        pointsTextField.isEnabled = false
         spinner.startAnimating()
     }
 
-    func stopSpinner() {
+    func stopLoading() {
         goButton.isEnabled = true
+        pointsTextField.isEnabled = true
         spinner.stopAnimating()
     }
 

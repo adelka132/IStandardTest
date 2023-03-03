@@ -25,8 +25,8 @@ final class MainPresenter {
 
     @MainActor
     func fetchPoints(count: Int) async {
-        view?.startSpinner()
-        defer { view?.stopSpinner() }
+        view?.startLoading()
+        defer { view?.stopLoading() }
 
         let result = await networkService.getPoints(count: count)
 
