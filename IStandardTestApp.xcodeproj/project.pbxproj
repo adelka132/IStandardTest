@@ -31,6 +31,9 @@
 		7D237B7729B0D95A00A90EBA /* Collection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237B7629B0D95A00A90EBA /* Collection+Extension.swift */; };
 		7D237B7A29B0E03C00A90EBA /* PointsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237B7929B0E03C00A90EBA /* PointsError.swift */; };
 		7D237BE129B2669C00A90EBA /* CGFloat+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237BE029B2669C00A90EBA /* CGFloat+Extension.swift */; };
+		7D237BE929B644A400A90EBA /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237BE829B644A400A90EBA /* UIColor+Extension.swift */; };
+		7D237BED29B6471900A90EBA /* PointsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237BEC29B6471900A90EBA /* PointsTextField.swift */; };
+		7D237BEF29B6485300A90EBA /* GoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D237BEE29B6485300A90EBA /* GoButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +64,9 @@
 		7D237B7629B0D95A00A90EBA /* Collection+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Extension.swift"; sourceTree = "<group>"; };
 		7D237B7929B0E03C00A90EBA /* PointsError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsError.swift; sourceTree = "<group>"; };
 		7D237BE029B2669C00A90EBA /* CGFloat+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extension.swift"; sourceTree = "<group>"; };
+		7D237BE829B644A400A90EBA /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		7D237BEC29B6471900A90EBA /* PointsTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsTextField.swift; sourceTree = "<group>"; };
+		7D237BEE29B6485300A90EBA /* GoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoButton.swift; sourceTree = "<group>"; };
 		BF6747C96667505CEB3ACA33 /* Pods-IStandardTestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IStandardTestApp.release.xcconfig"; path = "Target Support Files/Pods-IStandardTestApp/Pods-IStandardTestApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,6 +120,8 @@
 				7D237AB429AA33B400A90EBA /* MainViewCoordinator.swift */,
 				7D237AB129AA2CC100A90EBA /* MainPresenter.swift */,
 				7D237A9A29AA20AC00A90EBA /* MainViewController.swift */,
+				7D237BEC29B6471900A90EBA /* PointsTextField.swift */,
+				7D237BEE29B6485300A90EBA /* GoButton.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -125,6 +133,7 @@
 				7D237B6E29B0D63400A90EBA /* UIView+Extension.swift */,
 				7D237B7629B0D95A00A90EBA /* Collection+Extension.swift */,
 				7D237BE029B2669C00A90EBA /* CGFloat+Extension.swift */,
+				7D237BE829B644A400A90EBA /* UIColor+Extension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -347,10 +356,12 @@
 				7D237B7729B0D95A00A90EBA /* Collection+Extension.swift in Sources */,
 				7D237B0C29ACB1AE00A90EBA /* HTTPError.swift in Sources */,
 				7D237B1129ACB1AE00A90EBA /* HTTPMethod.swift in Sources */,
+				7D237BE929B644A400A90EBA /* UIColor+Extension.swift in Sources */,
 				7D237AB229AA2CC100A90EBA /* MainPresenter.swift in Sources */,
 				7D237AAD29AA2ABE00A90EBA /* Coordinator.swift in Sources */,
 				7D237BE129B2669C00A90EBA /* CGFloat+Extension.swift in Sources */,
 				7D237AAB29AA27DD00A90EBA /* AppCoordinator.swift in Sources */,
+				7D237BED29B6471900A90EBA /* PointsTextField.swift in Sources */,
 				7D237B1B29ACD41600A90EBA /* GraphicPresenter.swift in Sources */,
 				7D237B1629ACC6CB00A90EBA /* GraphicViewController.swift in Sources */,
 				7D237B6B29B0D50600A90EBA /* UITableViewCell+Extension.swift in Sources */,
@@ -361,6 +372,7 @@
 				7D237B7A29B0E03C00A90EBA /* PointsError.swift in Sources */,
 				7D237B1029ACB1AE00A90EBA /* PointService.swift in Sources */,
 				7D237B6929AFB9BB00A90EBA /* GraphicCell.swift in Sources */,
+				7D237BEF29B6485300A90EBA /* GoButton.swift in Sources */,
 				7D237B7529B0D8C200A90EBA /* GraphicData.swift in Sources */,
 				7D237A9729AA20AC00A90EBA /* AppDelegate.swift in Sources */,
 				7D237B0F29ACB1AE00A90EBA /* Endpoint.swift in Sources */,

@@ -39,12 +39,7 @@ final class GraphicViewController: UIViewController, UITableViewDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: GraphicCell.identifier,
                                                          for: indexPath) as? GraphicCell
             else { return UITableViewCell() }
-
-            cell.backgroundColor = .systemCyan
-            let view = UIView()
-            view.backgroundColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1)
-            cell.selectedBackgroundView = view
-
+            cell.configureAppearence()
             cell.set(model: model)
             return cell
         }
@@ -109,10 +104,10 @@ private extension GraphicViewController {
 
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.tintColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1)
+        navigationController?.navigationBar.tintColor = UIColor.GraphicView.NavigationBar.tintColor
 
-        tableView.backgroundColor = .systemCyan
-        tableView.separatorColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1)
+        tableView.backgroundColor = UIColor.GraphicView.TableView.backgroundColor
+        tableView.separatorColor = UIColor.GraphicView.TableView.separatorColor
         tableView.separatorInset = .zero
 
         view.addSubview(stackView)

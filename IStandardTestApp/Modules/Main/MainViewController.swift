@@ -21,37 +21,15 @@ final class MainViewController: UIViewController {
 
     var presenter: MainPresenterProtocol?
 
-    private let pointsTextField: UITextField = {
-        let textField = UITextField()
+    private let pointsTextField: PointsTextField = {
+        let textField = PointsTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "Сколько точек?"
-        textField.keyboardType = .numberPad
-        textField.backgroundColor = .white
-        textField.leftView = UIView(frame: CGRectMake(0, 0, 10, 20))
-        textField.leftViewMode = .always
-        textField.layer.cornerRadius = 10
-        textField.layer.borderColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1).cgColor
-        textField.layer.borderWidth = 2
-        textField.layer.shadowColor = UIColor.black.cgColor
-        textField.layer.shadowRadius = 10
-        textField.layer.shadowOpacity = 0.2
-        textField.tintColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1)
-        textField.textColor = UIColor(red: 44 / 255, green: 56 / 255, blue: 68 / 255, alpha: 1)
-        textField.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         return textField
     }()
 
-    private let goButton: UIButton = {
-        let button = UIButton(type: .system)
+    private let goButton: GoButton = {
+        let button = GoButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        button.setTitle("ПОЕХАЛИ", for: .normal)
-        button.setTitleColor(UIColor(red: 44 / 255, green: 56 / 255, blue: 68 / 255, alpha: 1), for: .normal)
-        button.backgroundColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1)
-        button.layer.cornerRadius = 10
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowRadius = 20
-        button.layer.shadowOpacity = 0.5
         return button
     }()
 
@@ -107,6 +85,7 @@ private extension MainViewController {
         view.addGestureRecognizer(tap)
 
         goButton.addTarget(self, action: #selector(goButtonPressed), for: .touchUpInside)
+
         addingSubviews()
         makeConstraints()
 
