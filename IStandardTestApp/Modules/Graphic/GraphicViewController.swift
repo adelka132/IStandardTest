@@ -28,7 +28,7 @@ final class GraphicViewController: UIViewController, UITableViewDelegate {
 
     private lazy var graphicView: LineChartView = {
         let gView = LineChartView()
-        gView.backgroundColor = .systemBlue
+        gView.backgroundColor = .systemCyan
         gView.translatesAutoresizingMaskIntoConstraints = false
         return gView
     }()
@@ -39,6 +39,11 @@ final class GraphicViewController: UIViewController, UITableViewDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: GraphicCell.identifier,
                                                          for: indexPath) as? GraphicCell
             else { return UITableViewCell() }
+
+            cell.backgroundColor = .systemCyan
+            let view = UIView()
+            view.backgroundColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1)
+            cell.selectedBackgroundView = view
 
             cell.set(model: model)
             return cell
@@ -100,9 +105,18 @@ extension GraphicViewController: GraphicViewProtocol {
 private extension GraphicViewController {
 
     func configureAppearence() {
+        view.backgroundColor = .systemCyan
+
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.tintColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1)
+
+        tableView.backgroundColor = .systemCyan
+        tableView.separatorColor = UIColor(red: 248 / 255, green: 216 / 255, blue: 28 / 255, alpha: 1)
+        tableView.separatorInset = .zero
+
         view.addSubview(stackView)
         [tableView, graphicView].forEach { stackView.addArrangedSubview($0) }
-        view.backgroundColor = .systemBackground
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Screenshot",
                                                             style: .plain,
                                                             target: self,
