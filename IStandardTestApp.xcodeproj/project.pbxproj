@@ -117,11 +117,10 @@
 		7D237AAE29AA2C9C00A90EBA /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				7D237C1229B693C400A90EBA /* Views */,
 				7D237AB429AA33B400A90EBA /* MainViewCoordinator.swift */,
 				7D237AB129AA2CC100A90EBA /* MainPresenter.swift */,
 				7D237A9A29AA20AC00A90EBA /* MainViewController.swift */,
-				7D237BEC29B6471900A90EBA /* PointsTextField.swift */,
-				7D237BEE29B6485300A90EBA /* GoButton.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -220,6 +219,15 @@
 				7D237AAC29AA2ABE00A90EBA /* Coordinator.swift */,
 			);
 			path = Application;
+			sourceTree = "<group>";
+		};
+		7D237C1229B693C400A90EBA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7D237BEC29B6471900A90EBA /* PointsTextField.swift */,
+				7D237BEE29B6485300A90EBA /* GoButton.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		B65A5E5DF21C9936D0B21C13 /* Frameworks */ = {

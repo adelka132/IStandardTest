@@ -10,8 +10,20 @@ protocol GraphicViewProtocol: AnyObject {
 
 final class GraphicViewController: UIViewController, UITableViewDelegate {
 
+    // MARK: - Constants
+
+    private enum Constants {
+        static let tableViewBackgroundColor = UIColor.systemCyan
+        static let tableViewSeparatorColor = UIColor.Palete.customYellow
+        static let navigationBarTintColor = UIColor.Palete.customYellow
+    }
+
+    // MARK: - Properties
+
     var presenter: GraphicPresenterProtocol?
-    
+
+    // MARK: - Private Properties
+
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -39,12 +51,12 @@ final class GraphicViewController: UIViewController, UITableViewDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: GraphicCell.identifier,
                                                          for: indexPath) as? GraphicCell
             else { return UITableViewCell() }
-            cell.configureAppearence()
+
             cell.set(model: model)
             return cell
         }
     }()
-    
+
     // MARK: - UIViewController
 
     override func viewDidLoad() {
@@ -104,10 +116,10 @@ private extension GraphicViewController {
 
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.tintColor = UIColor.GraphicView.NavigationBar.tintColor
+        navigationController?.navigationBar.tintColor = Constants.navigationBarTintColor
 
-        tableView.backgroundColor = UIColor.GraphicView.TableView.backgroundColor
-        tableView.separatorColor = UIColor.GraphicView.TableView.separatorColor
+        tableView.backgroundColor = Constants.tableViewBackgroundColor
+        tableView.separatorColor = Constants.tableViewSeparatorColor
         tableView.separatorInset = .zero
 
         view.addSubview(stackView)

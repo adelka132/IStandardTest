@@ -8,7 +8,7 @@ protocol MainViewProtocol: AnyObject {
 
 final class MainViewController: UIViewController {
 
-    struct Constants {
+    private enum Constants {
         static let pointsTextFieldDefault: CGFloat = 50.0
         static let pointsTextFieldHeight: CGFloat = 56.0
 
