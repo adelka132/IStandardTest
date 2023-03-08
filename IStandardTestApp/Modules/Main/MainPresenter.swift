@@ -9,13 +9,13 @@ protocol MainPresenterProtocol {
 final class MainPresenter {
 
     private weak var view: MainViewProtocol?
-    private let networkService: PointService
+    private let networkService: PointServiceable
     private let completionHandler: (MainRoute) -> Void
 
     // MARK: - Initialization
 
     init(view: MainViewProtocol,
-         networkService: PointService,
+         networkService: PointServiceable,
          completion: @escaping (MainRoute) -> Void)
     {
         self.view = view
